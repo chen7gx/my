@@ -2,12 +2,39 @@ syntax = "proto3";
 package chen7gx.my.my;
 
 // this line is used by starport scaffolding # proto/tx/import
+import "my/calim.proto";
 
 option go_package = "github.com/chen7gx/my/x/my/types";
 
 // Msg defines the Msg service.
 service Msg {
     // this line is used by starport scaffolding # proto/tx/rpc
+  rpc CreateCalim(MsgCreateCalim) returns (MsgCreateCalimResponse);
+  rpc UpdateCalim(MsgUpdateCalim) returns (MsgUpdateCalimResponse);
+  rpc DeleteCalim(MsgDeleteCalim) returns (MsgDeleteCalimResponse);
 }
 
 // this line is used by starport scaffolding # proto/tx/message
+message MsgCreateCalim {
+  string creator = 1;
+  string proof = 2;
+}
+
+message MsgCreateCalimResponse {
+  uint64 id = 1;
+}
+
+message MsgUpdateCalim {
+  string creator = 1;
+  uint64 id = 2;
+  string proof = 3;
+}
+
+message MsgUpdateCalimResponse { }
+
+message MsgDeleteCalim {
+  string creator = 1;
+  uint64 id = 2;
+}
+
+message MsgDeleteCalimResponse { }

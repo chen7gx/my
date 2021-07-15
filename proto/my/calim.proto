@@ -1,0 +1,12 @@
+syntax = "proto3";
+package chen7gx.my.my;
+
+option go_package = "github.com/chen7gx/my/x/my/types";
+
+import "gogoproto/gogo.proto";
+
+message Calim {
+  string creator = 1;
+  uint64 id = 2;
+  string proof = 3; 
+}

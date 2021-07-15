@@ -4,12 +4,40 @@ package chen7gx.my.my;
 import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 // this line is used by starport scaffolding # 1
+import "my/calim.proto";
 
 option go_package = "github.com/chen7gx/my/x/my/types";
 
 // Query defines the gRPC querier service.
 service Query {
     // this line is used by starport scaffolding # 2
+
+	// Queries a calim by id.
+	rpc Calim(QueryGetCalimRequest) returns (QueryGetCalimResponse) {
+		option (google.api.http).get = "/chen7gx/my/my/calim/{id}";
+	}
+
+	// Queries a list of calim items.
+	rpc CalimAll(QueryAllCalimRequest) returns (QueryAllCalimResponse) {
+		option (google.api.http).get = "/chen7gx/my/my/calim";
+	}
+
 }
 
 // this line is used by starport scaffolding # 3
+message QueryGetCalimRequest {
+	uint64 id = 1;
+}
+
+message QueryGetCalimResponse {
+	Calim Calim = 1;
+}
+
+message QueryAllCalimRequest {
+	cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllCalimResponse {
+	repeated Calim Calim = 1;
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}

@@ -6,12 +6,16 @@ package types
 import (
 	context "context"
 	fmt "fmt"
-	_ "github.com/cosmos/cosmos-sdk/types/query"
+	query "github.com/cosmos/cosmos-sdk/types/query"
 	grpc1 "github.com/gogo/protobuf/grpc"
 	proto "github.com/gogo/protobuf/proto"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	grpc "google.golang.org/grpc"
+	codes "google.golang.org/grpc/codes"
+	status "google.golang.org/grpc/status"
+	io "io"
 	math "math"
+	math_bits "math/bits"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -25,22 +29,227 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
+// this line is used by starport scaffolding # 3
+type QueryGetCalimRequest struct {
+	Id uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+}
+
+func (m *QueryGetCalimRequest) Reset()         { *m = QueryGetCalimRequest{} }
+func (m *QueryGetCalimRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryGetCalimRequest) ProtoMessage()    {}
+func (*QueryGetCalimRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7700fd91af4f4e23, []int{0}
+}
+func (m *QueryGetCalimRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryGetCalimRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryGetCalimRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryGetCalimRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryGetCalimRequest.Merge(m, src)
+}
+func (m *QueryGetCalimRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryGetCalimRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryGetCalimRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryGetCalimRequest proto.InternalMessageInfo
+
+func (m *QueryGetCalimRequest) GetId() uint64 {
+	if m != nil {
+		return m.Id
+	}
+	return 0
+}
+
+type QueryGetCalimResponse struct {
+	Calim *Calim `protobuf:"bytes,1,opt,name=Calim,proto3" json:"Calim,omitempty"`
+}
+
+func (m *QueryGetCalimResponse) Reset()         { *m = QueryGetCalimResponse{} }
+func (m *QueryGetCalimResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryGetCalimResponse) ProtoMessage()    {}
+func (*QueryGetCalimResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7700fd91af4f4e23, []int{1}
+}
+func (m *QueryGetCalimResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryGetCalimResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryGetCalimResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryGetCalimResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryGetCalimResponse.Merge(m, src)
+}
+func (m *QueryGetCalimResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryGetCalimResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryGetCalimResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryGetCalimResponse proto.InternalMessageInfo
+
+func (m *QueryGetCalimResponse) GetCalim() *Calim {
+	if m != nil {
+		return m.Calim
+	}
+	return nil
+}
+
+type QueryAllCalimRequest struct {
+	Pagination *query.PageRequest `protobuf:"bytes,1,opt,name=pagination,proto3" json:"pagination,omitempty"`
+}
+
+func (m *QueryAllCalimRequest) Reset()         { *m = QueryAllCalimRequest{} }
+func (m *QueryAllCalimRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryAllCalimRequest) ProtoMessage()    {}
+func (*QueryAllCalimRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7700fd91af4f4e23, []int{2}
+}
+func (m *QueryAllCalimRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryAllCalimRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryAllCalimRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryAllCalimRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryAllCalimRequest.Merge(m, src)
+}
+func (m *QueryAllCalimRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryAllCalimRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryAllCalimRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryAllCalimRequest proto.InternalMessageInfo
+
+func (m *QueryAllCalimRequest) GetPagination() *query.PageRequest {
+	if m != nil {
+		return m.Pagination
+	}
+	return nil
+}
+
+type QueryAllCalimResponse struct {
+	Calim      []*Calim            `protobuf:"bytes,1,rep,name=Calim,proto3" json:"Calim,omitempty"`
+	Pagination *query.PageResponse `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
+}
+
+func (m *QueryAllCalimResponse) Reset()         { *m = QueryAllCalimResponse{} }
+func (m *QueryAllCalimResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryAllCalimResponse) ProtoMessage()    {}
+func (*QueryAllCalimResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7700fd91af4f4e23, []int{3}
+}
+func (m *QueryAllCalimResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryAllCalimResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryAllCalimResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryAllCalimResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryAllCalimResponse.Merge(m, src)
+}
+func (m *QueryAllCalimResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryAllCalimResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryAllCalimResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryAllCalimResponse proto.InternalMessageInfo
+
+func (m *QueryAllCalimResponse) GetCalim() []*Calim {
+	if m != nil {
+		return m.Calim
+	}
+	return nil
+}
+
+func (m *QueryAllCalimResponse) GetPagination() *query.PageResponse {
+	if m != nil {
+		return m.Pagination
+	}
+	return nil
+}
+
+func init() {
+	proto.RegisterType((*QueryGetCalimRequest)(nil), "chen7gx.my.my.QueryGetCalimRequest")
+	proto.RegisterType((*QueryGetCalimResponse)(nil), "chen7gx.my.my.QueryGetCalimResponse")
+	proto.RegisterType((*QueryAllCalimRequest)(nil), "chen7gx.my.my.QueryAllCalimRequest")
+	proto.RegisterType((*QueryAllCalimResponse)(nil), "chen7gx.my.my.QueryAllCalimResponse")
+}
+
 func init() { proto.RegisterFile("my/query.proto", fileDescriptor_7700fd91af4f4e23) }
 
 var fileDescriptor_7700fd91af4f4e23 = []byte{
-	// 180 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0xcb, 0xad, 0xd4, 0x2f,
-	0x2c, 0x4d, 0x2d, 0xaa, 0xd4, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0xe2, 0x4d, 0xce, 0x48, 0xcd,
-	0x33, 0x4f, 0xaf, 0xd0, 0xcb, 0xad, 0xd4, 0xcb, 0xad, 0x94, 0x92, 0x49, 0xcf, 0xcf, 0x4f, 0xcf,
-	0x49, 0xd5, 0x4f, 0x2c, 0xc8, 0xd4, 0x4f, 0xcc, 0xcb, 0xcb, 0x2f, 0x49, 0x2c, 0xc9, 0xcc, 0xcf,
-	0x2b, 0x86, 0x28, 0x96, 0xd2, 0x4a, 0xce, 0x2f, 0xce, 0xcd, 0x2f, 0xd6, 0x4f, 0x4a, 0x2c, 0x4e,
-	0x85, 0x98, 0xa2, 0x5f, 0x66, 0x98, 0x94, 0x5a, 0x92, 0x68, 0xa8, 0x5f, 0x90, 0x98, 0x9e, 0x99,
-	0x07, 0x56, 0x0c, 0x51, 0x6b, 0xc4, 0xce, 0xc5, 0x1a, 0x08, 0x52, 0xe1, 0x64, 0x75, 0xe2, 0x91,
-	0x1c, 0xe3, 0x85, 0x47, 0x72, 0x8c, 0x0f, 0x1e, 0xc9, 0x31, 0x4e, 0x78, 0x2c, 0xc7, 0x70, 0xe1,
-	0xb1, 0x1c, 0xc3, 0x8d, 0xc7, 0x72, 0x0c, 0x51, 0x0a, 0xe9, 0x99, 0x25, 0x19, 0xa5, 0x49, 0x7a,
-	0xc9, 0xf9, 0xb9, 0xfa, 0x50, 0x67, 0xe8, 0xe7, 0x56, 0xea, 0x83, 0x89, 0x92, 0xca, 0x82, 0xd4,
-	0xe2, 0x24, 0x36, 0xb0, 0x59, 0xc6, 0x80, 0x00, 0x00, 0x00, 0xff, 0xff, 0xa5, 0x51, 0x6f, 0x67,
-	0xb6, 0x00, 0x00, 0x00,
+	// 389 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x84, 0x92, 0x31, 0x6b, 0xe3, 0x30,
+	0x18, 0x86, 0x63, 0xdf, 0xe5, 0x38, 0x74, 0x5c, 0x06, 0x91, 0x3b, 0xee, 0x72, 0xc1, 0xe4, 0x7c,
+	0x47, 0x5a, 0x32, 0x48, 0x24, 0x1d, 0x0a, 0xdd, 0xd2, 0x40, 0xb3, 0xb6, 0x19, 0x3b, 0x14, 0x64,
+	0x47, 0x38, 0x02, 0xdb, 0x72, 0x22, 0xb9, 0xd4, 0x94, 0x2e, 0x9d, 0x3b, 0x14, 0xfa, 0xa7, 0x3a,
+	0x06, 0xba, 0x74, 0x2c, 0x49, 0xff, 0x41, 0xff, 0x40, 0xb1, 0xa4, 0x92, 0xc4, 0x35, 0xcd, 0x12,
+	0x88, 0x78, 0x5f, 0x3d, 0xcf, 0xf7, 0xc9, 0xa0, 0x16, 0x65, 0x78, 0x9a, 0xd2, 0x59, 0x86, 0x92,
+	0x19, 0x97, 0x1c, 0x7e, 0xf7, 0x27, 0x34, 0xde, 0x0f, 0x2e, 0x50, 0x94, 0xa1, 0x28, 0x6b, 0x34,
+	0x03, 0xce, 0x83, 0x90, 0x62, 0x92, 0x30, 0x4c, 0xe2, 0x98, 0x4b, 0x22, 0x19, 0x8f, 0x85, 0x0e,
+	0x37, 0x3a, 0x3e, 0x17, 0x11, 0x17, 0xd8, 0x23, 0x82, 0xea, 0x5b, 0xf0, 0x79, 0xd7, 0xa3, 0x92,
+	0x74, 0x71, 0x42, 0x02, 0x16, 0xab, 0xb0, 0xc9, 0xe6, 0x20, 0x9f, 0x84, 0x2c, 0xd2, 0xff, 0xdd,
+	0x36, 0xa8, 0x9f, 0xe4, 0x8d, 0x21, 0x95, 0x83, 0xfc, 0x78, 0x44, 0xa7, 0x29, 0x15, 0x12, 0xd6,
+	0x80, 0xcd, 0xc6, 0xbf, 0xac, 0x96, 0xb5, 0xfb, 0x79, 0x64, 0xb3, 0xb1, 0x3b, 0x00, 0x3f, 0x0a,
+	0x39, 0x91, 0xf0, 0x58, 0x50, 0xd8, 0x01, 0x55, 0x75, 0xa0, 0xb2, 0xdf, 0x7a, 0x75, 0xb4, 0x61,
+	0x8e, 0x74, 0x58, 0x47, 0xdc, 0x33, 0x03, 0xeb, 0x87, 0xe1, 0x06, 0xec, 0x08, 0x80, 0x95, 0xa8,
+	0xb9, 0xa8, 0x8d, 0xf4, 0x54, 0x28, 0x9f, 0x0a, 0xe9, 0xdd, 0x98, 0xa9, 0xd0, 0x31, 0x09, 0xa8,
+	0xe9, 0x8e, 0xd6, 0x9a, 0xee, 0x8d, 0x65, 0x2c, 0x57, 0x80, 0xf7, 0x96, 0x9f, 0xb6, 0x58, 0xc2,
+	0xe1, 0x86, 0x8d, 0xad, 0x6c, 0x76, 0xb6, 0xda, 0x68, 0xd0, 0xba, 0x4e, 0xef, 0xc5, 0x02, 0x55,
+	0xa5, 0x03, 0x53, 0x83, 0x87, 0xff, 0x0a, 0xe0, 0xb2, 0xdd, 0x37, 0xfe, 0x7f, 0x1c, 0xd2, 0x24,
+	0xf7, 0xef, 0xf5, 0xc3, 0xf3, 0x9d, 0xfd, 0x07, 0xfe, 0xc6, 0x26, 0x8d, 0xa3, 0x0c, 0xbf, 0xbd,
+	0x2e, 0xbe, 0x64, 0xe3, 0x2b, 0x28, 0xc0, 0x57, 0xd5, 0xe9, 0x87, 0x61, 0x39, 0xb9, 0xf0, 0x10,
+	0xe5, 0xe4, 0xe2, 0x32, 0xdd, 0xa6, 0x22, 0xff, 0x84, 0xf5, 0x32, 0xf2, 0xe1, 0xc1, 0xfd, 0xc2,
+	0xb1, 0xe6, 0x0b, 0xc7, 0x7a, 0x5a, 0x38, 0xd6, 0xed, 0xd2, 0xa9, 0xcc, 0x97, 0x4e, 0xe5, 0x71,
+	0xe9, 0x54, 0x4e, 0x5b, 0x01, 0x93, 0x93, 0xd4, 0x43, 0x3e, 0x8f, 0xd6, 0x9b, 0xea, 0x47, 0x66,
+	0x09, 0x15, 0xde, 0x17, 0xf5, 0x51, 0xee, 0xbd, 0x06, 0x00, 0x00, 0xff, 0xff, 0x01, 0x37, 0x54,
+	0xdb, 0x0f, 0x03, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -55,6 +264,10 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type QueryClient interface {
+	// Queries a calim by id.
+	Calim(ctx context.Context, in *QueryGetCalimRequest, opts ...grpc.CallOption) (*QueryGetCalimResponse, error)
+	// Queries a list of calim items.
+	CalimAll(ctx context.Context, in *QueryAllCalimRequest, opts ...grpc.CallOption) (*QueryAllCalimResponse, error)
 }
 
 type queryClient struct {
@@ -65,22 +278,763 @@ func NewQueryClient(cc grpc1.ClientConn) QueryClient {
 	return &queryClient{cc}
 }
 
+func (c *queryClient) Calim(ctx context.Context, in *QueryGetCalimRequest, opts ...grpc.CallOption) (*QueryGetCalimResponse, error) {
+	out := new(QueryGetCalimResponse)
+	err := c.cc.Invoke(ctx, "/chen7gx.my.my.Query/Calim", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) CalimAll(ctx context.Context, in *QueryAllCalimRequest, opts ...grpc.CallOption) (*QueryAllCalimResponse, error) {
+	out := new(QueryAllCalimResponse)
+	err := c.cc.Invoke(ctx, "/chen7gx.my.my.Query/CalimAll", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 type QueryServer interface {
+	// Queries a calim by id.
+	Calim(context.Context, *QueryGetCalimRequest) (*QueryGetCalimResponse, error)
+	// Queries a list of calim items.
+	CalimAll(context.Context, *QueryAllCalimRequest) (*QueryAllCalimResponse, error)
 }
 
 // UnimplementedQueryServer can be embedded to have forward compatible implementations.
 type UnimplementedQueryServer struct {
 }
 
+func (*UnimplementedQueryServer) Calim(ctx context.Context, req *QueryGetCalimRequest) (*QueryGetCalimResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Calim not implemented")
+}
+func (*UnimplementedQueryServer) CalimAll(ctx context.Context, req *QueryAllCalimRequest) (*QueryAllCalimResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CalimAll not implemented")
+}
+
 func RegisterQueryServer(s grpc1.Server, srv QueryServer) {
 	s.RegisterService(&_Query_serviceDesc, srv)
+}
+
+func _Query_Calim_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryGetCalimRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).Calim(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/chen7gx.my.my.Query/Calim",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).Calim(ctx, req.(*QueryGetCalimRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_CalimAll_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryAllCalimRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).CalimAll(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/chen7gx.my.my.Query/CalimAll",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).CalimAll(ctx, req.(*QueryAllCalimRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 var _Query_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "chen7gx.my.my.Query",
 	HandlerType: (*QueryServer)(nil),
-	Methods:     []grpc.MethodDesc{},
-	Streams:     []grpc.StreamDesc{},
-	Metadata:    "my/query.proto",
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Calim",
+			Handler:    _Query_Calim_Handler,
+		},
+		{
+			MethodName: "CalimAll",
+			Handler:    _Query_CalimAll_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "my/query.proto",
 }
+
+func (m *QueryGetCalimRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryGetCalimRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryGetCalimRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Id != 0 {
+		i = encodeVarintQuery(dAtA, i, uint64(m.Id))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryGetCalimResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryGetCalimResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryGetCalimResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Calim != nil {
+		{
+			size, err := m.Calim.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintQuery(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryAllCalimRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryAllCalimRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryAllCalimRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Pagination != nil {
+		{
+			size, err := m.Pagination.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintQuery(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryAllCalimResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryAllCalimResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryAllCalimResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Pagination != nil {
+		{
+			size, err := m.Pagination.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintQuery(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Calim) > 0 {
+		for iNdEx := len(m.Calim) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Calim[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintQuery(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func encodeVarintQuery(dAtA []byte, offset int, v uint64) int {
+	offset -= sovQuery(v)
+	base := offset
+	for v >= 1<<7 {
+		dAtA[offset] = uint8(v&0x7f | 0x80)
+		v >>= 7
+		offset++
+	}
+	dAtA[offset] = uint8(v)
+	return base
+}
+func (m *QueryGetCalimRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Id != 0 {
+		n += 1 + sovQuery(uint64(m.Id))
+	}
+	return n
+}
+
+func (m *QueryGetCalimResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Calim != nil {
+		l = m.Calim.Size()
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	return n
+}
+
+func (m *QueryAllCalimRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Pagination != nil {
+		l = m.Pagination.Size()
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	return n
+}
+
+func (m *QueryAllCalimResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Calim) > 0 {
+		for _, e := range m.Calim {
+			l = e.Size()
+			n += 1 + l + sovQuery(uint64(l))
+		}
+	}
+	if m.Pagination != nil {
+		l = m.Pagination.Size()
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	return n
+}
+
+func sovQuery(x uint64) (n int) {
+	return (math_bits.Len64(x|1) + 6) / 7
+}
+func sozQuery(x uint64) (n int) {
+	return sovQuery(uint64((x << 1) ^ uint64((int64(x) >> 63))))
+}
+func (m *QueryGetCalimRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryGetCalimRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryGetCalimRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+			}
+			m.Id = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Id |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryGetCalimResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryGetCalimResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryGetCalimResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Calim", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Calim == nil {
+				m.Calim = &Calim{}
+			}
+			if err := m.Calim.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryAllCalimRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryAllCalimRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryAllCalimRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Pagination == nil {
+				m.Pagination = &query.PageRequest{}
+			}
+			if err := m.Pagination.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryAllCalimResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryAllCalimResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryAllCalimResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Calim", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Calim = append(m.Calim, &Calim{})
+			if err := m.Calim[len(m.Calim)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Pagination == nil {
+				m.Pagination = &query.PageResponse{}
+			}
+			if err := m.Pagination.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func skipQuery(dAtA []byte) (n int, err error) {
+	l := len(dAtA)
+	iNdEx := 0
+	depth := 0
+	for iNdEx < l {
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return 0, ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return 0, io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		wireType := int(wire & 0x7)
+		switch wireType {
+		case 0:
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return 0, ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return 0, io.ErrUnexpectedEOF
+				}
+				iNdEx++
+				if dAtA[iNdEx-1] < 0x80 {
+					break
+				}
+			}
+		case 1:
+			iNdEx += 8
+		case 2:
+			var length int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return 0, ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return 0, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				length |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if length < 0 {
+				return 0, ErrInvalidLengthQuery
+			}
+			iNdEx += length
+		case 3:
+			depth++
+		case 4:
+			if depth == 0 {
+				return 0, ErrUnexpectedEndOfGroupQuery
+			}
+			depth--
+		case 5:
+			iNdEx += 4
+		default:
+			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
+		}
+		if iNdEx < 0 {
+			return 0, ErrInvalidLengthQuery
+		}
+		if depth == 0 {
+			return iNdEx, nil
+		}
+	}
+	return 0, io.ErrUnexpectedEOF
+}
+
+var (
+	ErrInvalidLengthQuery        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowQuery          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupQuery = fmt.Errorf("proto: unexpected end of group")
+)
